@@ -4,13 +4,26 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import pandas as pd
 from database import Report
-from visualization import plot
+from visualization import plot, plotBar
+from AnalyseData import Analyse
 
 engine = create_engine('sqlite:///db.sqlite3')
 Session = sessionmaker(bind=engine)
 sess = Session()
 
-st.title('Indian Startup Scene Analysis')
+analysis = Analyse()
+
+st.title('Analysis on Indian Startup Scene')
+# st.markdown("""
+# # This is Heading 1
+# ## This is Heading 2
+# ### This is Heading 3
+# #### This is Heading 4
+# ##### This is Heading 5
+
+# ![My Image](https://yostartups.com/wp-content/uploads/2016/01/startup-incubator.png)
+# <img src="https://yostartups.com/wp-content/uploads/2016/01/startup-incubator.png" alt="drawing" width="500"/>
+# """)
 sidebar = st.sidebar
 
 def viewForm():
@@ -42,11 +55,16 @@ def viewReport():
 
     st.markdown(markdown)
 
+def analyseIndustry():
+    st.header('Analysis of Startup Industries')
+    data = analysis.getTopIndustries(20)
+    st.plotly_chart(plotBar(data, 'Trending Startup Industries', 'No. of STartups', 'Industry Name'))
+
 sidebar.header('Choose Your Option')
-options = [ 'View Database', 'Analyse', 'View Report' ]
+options = [ 'View Database', 'Analyse Industry', 'View Report' ]
 choice = sidebar.selectbox( options = options, label="Choose Action" )
 
 if choice == options[1]:
-    viewForm()
+    analyseIndustry()
 elif choice == options[2]:
     viewReport()
