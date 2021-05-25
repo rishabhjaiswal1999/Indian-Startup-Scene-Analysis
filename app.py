@@ -10,7 +10,7 @@ engine = create_engine('sqlite:///db.sqlite3')
 Session = sessionmaker(bind=engine)
 sess = Session()
 
-st.title('Indian Startup Scene Analysis')
+st.title(' Indian Startup Scene Analysis')
 sidebar = st.sidebar
 
 def viewForm():
