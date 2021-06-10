@@ -18,6 +18,7 @@ st.image('logo.jpg')
 st.markdown("---")
 sidebar = st.sidebar
 
+
 def viewDataset():
     st.header('Data Used in Project')
     dataframe = analysis.getDataframe()
@@ -37,7 +38,8 @@ def viewDataset():
         st.dataframe(dataframe.describe())
         st.markdown('---')
 
-        types = {'object' : 'Categorical', 'int64': 'Numerical', 'float64': 'Numerical'}
+        types = {'object': 'Categorical',
+                 'int64': 'Numerical', 'float64': 'Numerical'}
         types = list(map(lambda t: types[str(t)], dataframe.dtypes))
         st.header('Dataset Columns')
         for col, t in zip(dataframe.columns, types):
@@ -48,21 +50,32 @@ def viewDataset():
             cols[2].markdown('#### Type :')
             cols[3].markdown(f"## {t}")
 
+
 def analyseTimeline():
     st.header('Year wise Startup Fundings')
-    st.plotly_chart(plotBar(analysis.getYearwiseFundingsCount(), 'title', 'xlable', 'ylabel'))
-    
+    st.plotly_chart(plotBar(analysis.getYearwiseFundingsCount(),
+                            'title', 'xlable', 'ylabel'))
+
     st.header('Year wise Startup Fundings Sum')
-    st.plotly_chart(plotBar(analysis.getYearwiseFundingsSum(), 'title', 'xlable', 'ylabel'))
+    st.plotly_chart(plotBar(analysis.getYearwiseFundingsSum(),
+                            'title', 'xlable', 'ylabel'))
+
 
 def analyseFundings():
     st.header('Year wise Startup Fundings')
+    # st.plotly_chart(plotScatter(analysis.getDataframe(
+    # ), 'StartupName', 'AmountInUSD', 'StartupName', 'default title'))
+
+    st.dataframe(analysis.getFundvsStartup(5))
+
+    # st.plotly_chart(plotScatter(analysis.getFundvsStartup(5),
+    #                             'StartupName', 'TotalFund'))
 
 
 def analyseIndustry():
     st.header('Analysis of Startup Industries')
 
-    n = st.select_slider(options=[10, 40, 60] , label="Select Count")
+    n = st.select_slider(options=[10, 40, 60], label="Select Count")
 
     data = analysis.getTopIndustries(n)
     st.plotly_chart(plotBar(data, 'Trending Startup Industries', 'Name of Industry', 'Number of startup'))
@@ -77,13 +90,22 @@ def analyseIndustry():
     st.plotly_chart(plotBar(data, 'Top funding type', 'Funding type', 'Number of Fundings'))
 
     data = analysis.getFundingsTypeSum(n)
-    st.plotly_chart(plotBar(data, 'Trending Startups', 'No. of Fundings', 'Startup Name'))
+    st.plotly_chart(plotBar(data, 'Trending Startups',
+                            'No. of Fundings', 'Startup Name'))
 
     data = analysis.getCitySum(n)
-    st.plotly_chart(plotBar(data, 'Trending Startups', 'No. of Fundings', 'Startup Name'))
+    st.plotly_chart(plotBar(data, 'Trending Startups',
+                            'No. of Fundings', 'Startup Name'))
 
     data = analysis.getCityCount(n)
-    st.plotly_chart(plotBar(data, 'Trending Startups', 'No. of Fundings', 'Startup Name'))
+    st.plotly_chart(plotBar(data, 'Trending Startups',
+                            'No. of Fundings', 'Startup Name'))
+
+
+def analyseLocation():
+    st.header('Startup and Fundings Location Analysis')
+    data = analysis.getDataframe()['City'].value_counts()
+    st.plotly_chart(plotPie(data))
 
 def overview():
     st.header("project overview")
@@ -93,18 +115,16 @@ def overview():
     """)
 
 sidebar.header('Choose Your Option')
-options = [ 'Project Overview','View Dataset', 'Analyse Industry', 'Analyse Timeline' ]
-choice = sidebar.selectbox( options = options, label="Choose Action" )
-
+options = ['View Dataset', 'Analyse Industry',
+           'Analyse Timeline', 'Analyse Funding', 'Analyse Locations']
+choice = sidebar.selectbox(options=options, label="Choose Action")
 if choice == options[0]:
     overview()
 if choice == options[1]:
     viewDataset()
 elif choice == options[2]:
-    analyseIndustry()
-elif choice == options[3]:
     analyseTimeline()
-
-
-
-
+elif choice == options[3]:
+    analyseFundings()
+elif choice == options[4]:
+    analyseLocation()
