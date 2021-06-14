@@ -1,19 +1,10 @@
 import streamlit as st
-
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
-import pandas as pd
-from database import Report
 from visualization import *
 from AnalyseData import Analyse
 
-engine = create_engine('sqlite:///db.sqlite3')
-Session = sessionmaker(bind=engine)
-sess = Session()
+analysis = Analyse('datasets/tourism_india.xlsx')
 
-analysis = Analyse()
-
-st.title('Indian Startup Scene Analysis')
+st.title('Indian Tourism Analysis')
 st.image('logo.jpg')
 st.markdown("---")
 sidebar = st.sidebar
@@ -52,60 +43,49 @@ def viewDataset():
 
 
 def analyseTimeline():
-    st.header('Year wise Startup Fundings')
-    st.plotly_chart(plotBar(analysis.getYearwiseFundingsCount(),
-                            'title', 'xlable', 'ylabel'))
+    st.header('Analyse Timeline of Tourism in India')
 
-    st.header('Year wise Startup Fundings Sum')
-    st.plotly_chart(plotBar(analysis.getYearwiseFundingsSum(),
-                            'title', 'xlable', 'ylabel'))
+    c1, c2 = st.beta_columns(2)
+    c1.plotly_chart(plotLine(analysis.getArrival(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
+    c2.plotly_chart(plotBar(analysis.getArrival(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
 
+    c1, c2 = st.beta_columns(2)
+    c1.plotly_chart(plotLine(analysis.getFTA(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
+    c2.plotly_chart(plotBar(analysis.getFTA(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
 
-def analyseFundings():
-    st.header('Year wise Startup Fundings')
-    # st.plotly_chart(plotScatter(analysis.getDataframe(
-    # ), 'StartupName', 'AmountInUSD', 'StartupName', 'default title'))
+    c1, c2 = st.beta_columns(2)
+    c1.plotly_chart(plotLine(analysis.getFEE(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
+    c2.plotly_chart(plotBar(analysis.getFEE(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
 
-    st.dataframe(analysis.getFundvsStartup(5))
+    c1, c2 = st.beta_columns(2)
+    c1.plotly_chart(plotLine(analysis.getGDP(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
+    c2.plotly_chart(plotBar(analysis.getGDP(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
 
-    # st.plotly_chart(plotScatter(analysis.getFundvsStartup(5),
-    #                             'StartupName', 'TotalFund'))
+    c1, c2 = st.beta_columns(2)
+    c1.plotly_chart(plotLine(analysis.getGDPPercent(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
+    c2.plotly_chart(plotBar(analysis.getGDPPercent(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
 
+    c1, c2 = st.beta_columns(2)
+    c1.plotly_chart(plotLine(analysis.getGDPDirect(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
+    c2.plotly_chart(plotBar(analysis.getGDPDirect(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
 
-def analyseIndustry():
-    st.header('Analysis of Startup Industries')
+    c1, c2 = st.beta_columns(2)
+    c1.plotly_chart(plotLine(analysis.getSpending(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
+    c2.plotly_chart(plotBar(analysis.getSpending(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
 
-    n = st.select_slider(options=[10, 40, 60], label="Select Count")
+    c1, c2 = st.beta_columns(2)
+    c1.plotly_chart(plotLine(analysis.getSpending(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
+    c2.plotly_chart(plotBar(analysis.getSpending(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
 
-    data = analysis.getTopIndustries(n)
-    st.plotly_chart(plotBar(data, 'Trending Startup Industries', 'Name of Industry', 'Number of startup'))
+    c1, c2 = st.beta_columns(2)
+    c1.plotly_chart(plotLine(analysis.getJobs(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
+    c2.plotly_chart(plotBar(analysis.getJobs(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
 
-    data = analysis.getTopStartups(n)
-    st.plotly_chart(plotBar(data, 'Trending Startups', 'Name of startups', 'Number of Funding'))
-
-    data = analysis.getTopStartupsSum(n)
-    st.plotly_chart(plotBar(data, 'Trending Startups', 'Name of startups', 'Total Funding'))
-
-    data = analysis.getFundingsTypeCount(n)
-    st.plotly_chart(plotBar(data, 'Top funding type', 'Funding type', 'Number of Fundings'))
-
-    data = analysis.getFundingsTypeSum(n)
-    st.plotly_chart(plotBar(data, 'Trending Startups',
-                            'No. of Fundings', 'Startup Name'))
-
-    data = analysis.getCitySum(n)
-    st.plotly_chart(plotBar(data, 'Trending Startups',
-                            'No. of Fundings', 'Startup Name'))
-
-    data = analysis.getCityCount(n)
-    st.plotly_chart(plotBar(data, 'Trending Startups',
-                            'No. of Fundings', 'Startup Name'))
+    c1, c2 = st.beta_columns(2)
+    c1.plotly_chart(plotLine(analysis.getArrivalVisa(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
+    c2.plotly_chart(plotBar(analysis.getArrivalVisa(), title="Arrival Count of Tourists in India", xlabel="Year", ylabel="No. of Tourists"))
 
 
-def analyseLocation():
-    st.header('Startup and Fundings Location Analysis')
-    data = analysis.getDataframe()['City'].value_counts()
-    st.plotly_chart(plotPie(data))
 
 def overview():
     st.header("project overview")
@@ -114,9 +94,9 @@ def overview():
     2. Another item
     """)
 
+
 sidebar.header('Choose Your Option')
-options = ['View Dataset', 'Analyse Industry',
-           'Analyse Timeline', 'Analyse Funding', 'Analyse Locations']
+options = ['Overview', 'View Dataset', 'Analyse Timeline']
 choice = sidebar.selectbox(options=options, label="Choose Action")
 if choice == options[0]:
     overview()
@@ -124,7 +104,3 @@ if choice == options[1]:
     viewDataset()
 elif choice == options[2]:
     analyseTimeline()
-elif choice == options[3]:
-    analyseFundings()
-elif choice == options[4]:
-    analyseLocation()
