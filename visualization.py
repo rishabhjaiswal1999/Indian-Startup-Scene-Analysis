@@ -1,18 +1,20 @@
 import plotly.graph_objects as go
 import plotly.express as px
 
+
 def plotLine(datapoints, title, xlabel, ylabel):
 
-    layout = go.Layout(title=title,
+    layout = go.Layout(title='',
                        xaxis=dict(title=xlabel),
                        yaxis=dict(title=ylabel))
     fig = go.Figure(layout=layout)
     fig.add_trace(go.Line(x=datapoints.index, y=datapoints.values))
     return fig
 
+
 def plotBar(datapoints, title, xlabel, ylabel):
 
-    layout = go.Layout(title=title,
+    layout = go.Layout(title='',
                        xaxis=dict(title=xlabel),
                        yaxis=dict(title=ylabel))
     fig = go.Figure(layout=layout)
@@ -34,16 +36,16 @@ def plotGroupedBar(datapoints, title, xlabel, ylabel, categories, colors=['india
 
 def plotPie(datapoints):
 
-    fig = px.pie(datapoints,names=datapoints.index
-                ,values=datapoints.values,title='Total Number of Startup in Cities',height=800)
-    fig.update_traces(textposition='inside',textinfo='percent+label')
+    fig = px.pie(datapoints, names=datapoints.index, values=datapoints.values,
+                 title='Total Number of Startup in Cities', height=800)
+    fig.update_traces(textposition='inside', textinfo='percent+label')
 
     fig.show()
     return fig
 
 
-def plotScatter(data, x, y, title='default title', template="plotly_dark"):
-    fig = px.scatter(data_frame=data, x=x, y=y,
+def plotScatter(data, x, y, color, title='default title', template="plotly_dark"):
+    fig = px.scatter(data_frame=data, x=x, y=y, color=color,
                      title=title, trendline="ols")
 
     fig.update_traces(marker=dict(size=10,

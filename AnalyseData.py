@@ -8,10 +8,11 @@ class Analyse():
         self.cleanData()
 
     def cleanData(self):
-        self.df.drop(columns=['Plan Period', 'Unnamed: 13', 'Unnamed: 14', 'Unnamed: 15',
+        self.df.drop(columns=['Plan Period',  'Unnamed: 14', 'Unnamed: 15',
                               'Unnamed: 16', 'Unnamed: 17', 'Unnamed: 18', 'Unnamed: 19',
                               'Unnamed: 20', 'Unnamed: 21', 'Unnamed: 22', 'Unnamed: 23',
                               'Unnamed: 24', 'Unnamed: 25'], inplace=True, axis=1)
+        self.df.fillna(0, inplace=True)
 
     def getDataframe(self):
         return self.df
